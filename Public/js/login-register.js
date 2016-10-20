@@ -31,7 +31,7 @@ $(document).on("blur", "input[type='password']", function() {
 });
 
 $(document).on('blur', '#register-email', function() {
-    blurCheckEmail($(this));
+    blurCheckEmail($(this), true);
 });
 
 $(document).on('blur', '#register-password', function() {
@@ -39,7 +39,7 @@ $(document).on('blur', '#register-password', function() {
 });
 
 $(document).on('blur', '#captcha', function() {
-    blurCheckCaptcha($(this));
+    blurCheckCaptcha($(this), true);
 });
 
 $(document).on('click', '#register-btn', function() {
@@ -56,7 +56,7 @@ function focusDeleteTip(obj) {
     $('#' + focus_id + '-tip').hide(0).html('');
 }
 
-function blurCheckEmail(obj) {
+function blurCheckEmail(obj, async) {
     var email = obj.val();
     if (email == '请输入邮箱') {
         $('#register-email-tip').show(0).html('邮箱不能为空！');
@@ -66,6 +66,7 @@ function blurCheckEmail(obj) {
         $.ajax({
             type: "POST",
             url: gCheckEmailAjaxUrl,
+            async: async,
             data: {
                 email: email,
             },
@@ -73,12 +74,16 @@ function blurCheckEmail(obj) {
                 if (!response.success) {
                     $('#register-email-tip').show(0).html(response.msg);
                     checkEmailPassed = false;
-                    return false;
                 } else {
                     checkEmailPassed = true;
                 }
+                return checkEmailPassed;
             }
         });
+
+        if (async == false) {
+            return checkEmailPassed;
+        }
     }
 }
 
@@ -102,7 +107,7 @@ function blurCheckPassword(obj) {
     }
 }
 
-function blurCheckCaptcha(obj) {
+function blurCheckCaptcha(obj, async) {
     var captcha = obj.val();
     if (captcha == "请输入验证码") {
         $('#captcha-tip').show(0).html('验证码不能为空！');
@@ -112,6 +117,7 @@ function blurCheckCaptcha(obj) {
         $.ajax({
             type: "POST",
             url: gCheckCaptchaAjaxUrl,
+            async: async,
             data: {
                 captcha: captcha,
             },
@@ -119,26 +125,26 @@ function blurCheckCaptcha(obj) {
                 if (!response.success) {
                     $('#captcha-tip').show(0).html(response.msg);
                     checkCaptchaPassed = false;
-                    return false;
                 } else {
                     checkCaptchaPassed = true;
                 }
+                return checkCaptchaPassed;
             }
         });
+        if (async == false) {
+            return checkCaptchaPassed;
+        }
     }
 }
 
 function register() {
-    if (!checkEmailPassed) {
-        blurCheckEmail($("#register-email"));
+    if (!checkEmailPassed && !blurCheckEmail($("#register-email"), false)) {
         return false;
     }
-    if (!checkPasswordPassed) {
-        blurCheckPassword($("#register-password"));
+    if (!checkPasswordPassed && !blurCheckPassword($("#register-password"))) {
         return false;
     }
-    if (!checkCaptchaPassed) {
-        blurCheckCaptcha($("#captcha"));
+    if (!checkCaptchaPassed && !blurCheckCaptcha($("#captcha"), false)) {
         return false;
     }
 
@@ -160,7 +166,7 @@ function register() {
                 updateCaptcha();
                 return false;
             } else {
-                self.location.href = $("#forward-url").val();
+                window.location.href = $("#forward-url").val();
             }
         }
     });
