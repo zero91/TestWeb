@@ -1,0 +1,121 @@
+.login-box {
+  border: 1px solid #e6e6e6;
+}
+
+.userinfo-section {
+  padding: 3em 2em;
+  border-bottom: 1px solid #c1c1c1;
+  margin-left:auto;
+  margin-right:auto; 
+  width: 40%;
+}
+
+.box-head {
+  color: #1ac7c3;
+  font-size: 2em;
+  font-weight: 400;
+  font-family: 'Georgia Italic';
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+.user-form {
+  font-family: 'Georgia Italic';
+}
+
+.user-form-item {
+  padding: 5px 0;
+}
+
+.user-form-item #register-email, .user-form-item #register-password, .user-form-item #captcha {
+  padding: 10px;
+  color: #9198A3;
+  font-size: 1.2em;
+  background: #fff;
+  outline: none;
+  border: 1px solid #eee;
+}
+
+.user-form-item #register-email, .user-form-item #register-password {
+  width: 100%;
+}
+
+.user-form-item #captcha {
+  width: 55%;
+}
+
+.user-form-item #captcha-image {
+  height: 40px;
+  width: 43%;
+}
+
+.user-form-item .tips-ipt {
+    display: none;
+    clear: both;
+    color: #f44336;
+    font-size: 12px;
+    height: 24px;
+    line-height: 24px;
+    padding-top: 5px;
+    overflow: hidden;
+}
+
+.user-form input[type="submit"] {
+  width: 100%;
+  margin-top: 10px;
+  display: inline-block;
+  padding: 13px 25px;
+  background: #1ac7c3;
+  color: #FFF;
+  font-size: 1em;
+  line-height: 18px;
+  text-transform: uppercase;
+  border: none;
+  outline: none;
+  transition: 0.2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+}
+
+.user-form input[type="submit"]:hover {
+  background:#000;
+}
+
+@media screen and (max-width: 1024px) {
+  .userinfo-section {
+    padding: 2em;
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .userinfo-section {
+    padding: 2em 1.5em;
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 640px) { /*galaxy s4 横屏*/
+  .userinfo-section {
+    padding: 1.0em 1em;
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 480px) { /*galaxy s4 竖屏*/
+  .userinfo-section {
+    padding: 1em;
+    width: 100%;
+  }
+  .user-form input[type="submit"] {
+    padding: 10px 25px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .userinfo-section {
+    padding: 1em;
+    width: 100%;
+  }
+}

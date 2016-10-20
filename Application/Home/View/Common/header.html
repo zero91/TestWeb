@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$title}</title>
+<link  href="__PUBLIC__/third/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<script src="__PUBLIC__/third/jquery/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Konstructs Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+</head>
+
+<script>
+var gSiteUrl = "__ROOT__";
+var gCheckCaptchaAjaxUrl = "{:U('User/ajaxCheckCaptcha')}";
+var gCheckEmailAjaxUrl = "{:U('User/ajaxCheckEmail')}";
+var gRegisterAjaxUrl = "{:U('User/ajaxRegister')}";
+</script>
+
+<body>
+<!-- header-section-starts -->
+<div class="header">
+    <div class="container">
+        <div class="logo">
+            <a href="{:U('Index/index')}"><h1>解惑者</h1></a>
+        </div>
+        <div class="pages">
+            <ul>
+                <li><a class="active" href="index.html">Articles</a></li>
+                <li><a href="3dprinting.html">3D Printers</a></li>
+                <li><a href="404.html">Tutorials</a></li>
+            </ul>
+        </div>
+        <div class="navigation">
+            <ul>
+                <li><a href="about.html">关于我们</a></li>
+                <li><a class="active" href="{:U('User/login')}">登录</a></li>
+                <li><a class="active" href="{:U('User/register')}">注册</a></li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="header-bottom">
+        <div class="type">
+            <h5>Article Types</h5>
+        </div>
+        <span class="menu"></span>
+        <div class="list-nav">
+            <ul>                                                                 
+                <li><a href="3dprinting.html">3D Printing</a></li>|
+                <li><a href="materials.html">Materials</a></li>|
+                <li><a href="printing.html">Printing</a></li>|
+                <li><a href="filestoprint.html">Files to Print</a></li>|
+                <li><a href="404.html">Videos</a></li>|
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+        <!-- script for menu -->
+            <script>
+            $( "span.menu" ).click(function() {
+              $( ".list-nav" ).slideToggle( "slow", function() {
+                // Animation complete.
+              });
+            });
+        </script>
+        <!-- script for menu -->
+
+        <div class="clearfix"></div>
+    </div>
+</div>
