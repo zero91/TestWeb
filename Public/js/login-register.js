@@ -47,6 +47,11 @@ $(document).on('click', '#register-btn', function() {
     register();
 });
 
+$(document).on('click', '#login-btn', function() {
+    focusDeleteTip($(this));
+    login();
+});
+
 checkEmailPassed = false;
 checkPasswordPassed = false;
 checkCaptchaPassed = false;
@@ -171,3 +176,35 @@ function register() {
         }
     });
 }
+
+function login() {
+    if ($("#captcha").length > 0 
+                && !checkCaptchaPassed && !blurCheckCaptcha($("#captcha"), false)) {
+        return false;
+    }
+    var username = $("#login-username").val();
+    var password = $("#login-password").val();
+    var captcha = $("#captcha").val();
+
+    $.ajax({
+        type: "POST",
+        url: gLoginAjaxUrl,
+        data: {
+            username: username,
+            password: password,
+            captcha: captcha,
+        },
+        success: function(response) {
+            console.log(response);
+            if (!response.success) {
+                $('#login-btn-tip').show(0).html(response.msg);
+                updateCaptcha();
+                $('#login-btn-tip').animate({opacity: "hide"}, 3000);
+                return false;
+            } else {
+                window.location.href = $("#forward-url").val();
+            }
+        }
+    });
+}
+

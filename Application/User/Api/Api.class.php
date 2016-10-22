@@ -21,7 +21,7 @@ abstract class Api {
     //
     // @brief  构造方法，检测相关配置
     //
-    public function __construct(){
+    public function __construct() {
         //相关配置检测
         defined('UC_APP_ID') || throw_exception('UC配置错误：缺少UC_APP_ID');
         defined('UC_API_TYPE') || throw_exception('UC配置错误：缺少UC_APP_API_TYPE');

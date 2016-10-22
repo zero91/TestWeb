@@ -10,6 +10,7 @@
 //
 // @param  string   $captcha  验证码
 // @param  integer  $id       验证码ID
+// @param  integer  $reset    验证后是否重置验证码
 //
 // @return boolean   验证码是否正确
 //

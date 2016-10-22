@@ -3,25 +3,27 @@
 <div class="container">
     <div class="login-box">
         <div class="userinfo-section">
-            <h3 class="box-head">注册</h3>
+            <h3 class="box-head">登录</h3>
             <div class="user-form">
                 <input type="hidden" value="{$forward}" id="forward-url" name="forward-url">
                 <div class="user-form-item">
-                    <input type="text" value="请输入邮箱" id="register-email" name="email">
-                    <p class="tips-ipt" id="register-email-tip">邮箱不能为空!</p>
+                    <input type="text" value="请输入账号" id="login-username" name="username">
+                    <p class="tips-ipt" id="login-username-tip">账号不能为空!</p>
                 </div>
                 <div class="user-form-item">
-                    <input type="password" placeholder="请输入密码" data-placeholder="请输入密码" id="register-password" name="password">
-                    <p class="tips-ipt" id="register-password-tip">密码不能为空!</p>
+                    <input type="password" placeholder="请输入密码" data-placeholder="请输入密码" id="login-password" name="password">
+                    <p class="tips-ipt" id="login-password-tip">密码不能为空!</p>
                 </div>
+                <if condition="$Think.config.CODE_LOGIN eq true">
                 <div class="user-form-item">
                     <input type="text" value="请输入验证码" id="captcha" name="captcha"/>
                     <img src="{:U('User/captcha')}" onclick="updateCaptcha();" id="captcha-image" />
                     <p class="tips-ipt" id="captcha-tip">验证码不能为空!</p>
                 </div>
+                </if>
                 <div class="user-form-item">
-                    <input name="register-btn" type="submit" id="register-btn" value="立即注册">
-                    <p class="tips-ipt" id="register-btn-tip">注册失败!</p>
+                    <input name="login-btn" type="submit" id="login-btn" value="登录">
+                    <p class="tips-ipt" id="login-btn-tip">登录失败!</p>
                 </div>
             </div>
             <div class="clearfix"></div>

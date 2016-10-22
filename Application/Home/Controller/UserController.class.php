@@ -1,6 +1,9 @@
 <?php
+// +----------------------------------------------------------------------
+// | Author: Donald Cheung
+// +----------------------------------------------------------------------
+
 namespace Home\Controller;
-use User\Api\UserApi;
 
 class UserController extends HomeController {
     public function index() {
@@ -19,23 +22,42 @@ class UserController extends HomeController {
     }
 
     public function login() {
-        $this->assign('title', "登录");
-
         $forward = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : __ROOT__;
         $this->assign('forward', $forward);
 
+        $this->assign('title', "登录");
         $this->display();
     }
 
-
     public function logout() {
-        if (is_login()) {
+        if (g_is_login() > 0) {
             D('User')->logout();
             $this->success('退出成功！', U('Index/index'));
         } else {
             $this->redirect('Index/index');
         }
     }  
+
+    //
+    // @brief  method  verifyEmail  用户邮箱验证
+    //
+    public function verifyEmail($auth="") {
+        //TODO 待进一步完善
+        $email = g_auth_decode(urldecode($auth), C('USER_AUTH_KEY'));
+
+        $user_info = A('User/User', 'Api')->info($email, 2);
+        if (is_array($user_info)) {
+            if ($user_info['authstr'] == $auth) {
+                echo "Accpeted<br/>";
+            }
+
+        } else {
+            echo "Wrong Answer<br/>";
+        }
+
+        echo $user_info['authstr'] . "<br/>";
+        echo $auth . "<br/>";
+    }
 
     //
     // @brief  method  captcha  返回验证码图片
@@ -132,7 +154,7 @@ class UserController extends HomeController {
                     array("success" => false, "error" => 101, "msg" => "系统暂不开放注册"));
         }
 
-        if (C('CODE_REGISTER') && !g_check_captcha($captcha)) {
+        if (C('CODE_REGISTER') && !g_check_captcha($captcha, $this->verify_id, true)) {
             $this->ajaxReturn(array("success" => false, "error" => 102, "msg" => "验证码错误"));
         }
 
@@ -144,7 +166,18 @@ class UserController extends HomeController {
 
         $uid = A('User/User', 'Api')->register($email, $password, $email); //默认用户名为注册邮箱
         if ($uid > 0) {
-            //TODO: 发送验证邮件
+            $authstr = g_auth_encode($email, C('USER_AUTH_KEY'), 24 * 3600); //24小时内有效
+            A('User/User', 'Api')->updateInfo($email, $password, array("authstr" => $authstr), 2);
+
+            $verify_url = WEB_DOMAIN . U('User/verifyEmail') . '?auth=' . urlencode($authstr);
+
+            $subject = "欢迎注册" . C('PRODUCT_NAME') . "，请验证您的邮箱";
+            $message = '';
+            $message .= '<p>请点击以下链接，激活账号（24小时内有效）：</p>';
+            $message .= '<a swaped="true" target="_blank" href="' . $verify_url . '">';
+            $message .= $verify_url . '</a>';
+            $message .= '<p>如果您没有进行注册操作，请忽略此邮件。</p>';
+            g_send_mail($email, $email, $subject, $message);
             $this->ajaxReturn(array("success" => true));
 
         } else {
@@ -178,6 +211,73 @@ class UserController extends HomeController {
                     break;
             }
             $this->ajaxReturn($res);
+        }
+    }
+
+    //
+    // @brief  method  ajaxLogin  登录
+    // @request  POST
+    //
+    // @param  string  $username  用户名
+    // @param  string  $password  登录密码
+    // @param  string  $captcha   验证码
+    //
+    // @ajaxReturn  成功 - array("success" => true)
+    //              失败 - array("success" => false, "error" => 错误码, 'msg' => 错误提示信息)
+    //
+    // @error  101  验证码错误
+    // @error  102  已登录
+    // @error  103  应用注册失败
+    // @error  104  密码错误
+    // @error  105  用户不存在或被禁用
+    // @error  106  发生未知错误
+    //
+    public function ajaxLogin($username="", $password="", $captcha="") {
+        if (C('CODE_LOGIN') && !g_check_captcha($captcha, $this->verify_id, true)) {
+            $this->ajaxReturn(array('success' => false, 'error' => 101, 'msg' => '验证码错误'));
+        }
+
+        //TODO: cookie有效时间的处理
+
+        if (g_is_login() > 0) {
+            $this->ajaxReturn(array('success' => false, 'error' => 102, 'msg' => '你已登录'));
+        }
+
+        $uid = A('User/User', 'Api')->login($username, $password, 1);
+        if ($uid > 0) {
+            if (D('User')->login($uid)) {
+                $this->ajaxReturn(array("success" => true));
+            } else {
+                $this->ajaxReturn(array('success' => false, 'error' => 103,
+                                        'msg' => D('User')->getError()));
+            }
+        } else {
+            $res = array('success' => false);
+            switch ($uid) {
+                case -2: $res['error'] = 104; $res['msg'] = '密码错误'; break;
+                case -3: $res['error'] = 105; $res['msg'] = '用户不存在或被禁用'; break;
+                default: $res['error'] = 106; $res['msg'] = '发生未知错误'; break;
+            }
+            $this->ajaxReturn($res);
+        }
+    }
+
+    //
+    // @brief  ajax_logout  用户登出
+    //
+    // @request  POST
+    //
+    // @ajaxReturn  成功 - array("success" => true)
+    //              失败 - array("success" => false, "error" => 错误码, "msg" => 用户提示信息)
+    //
+    // @error  101  用户尚未登录
+    //
+    public function ajaxLogout() {
+        if (g_is_login() > 0) {
+            D('User')->logout();
+            $this->ajaxReturn(array("success" => true));
+        } else {
+            $this->ajaxReturn(array("success" => false, "error" => 101, "msg" => "您尚未登录"));
         }
     }
 

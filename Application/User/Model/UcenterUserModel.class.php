@@ -97,7 +97,7 @@ class UcenterUserModel extends Model {
 
         // 获取用户数据
         $user = $this->where($map)->find();
-        if (is_array($user) && $user['status'] == 1) {
+        if (is_array($user) && $user['status'] > 0) {
             if ($this->encryptPassword($password) === $user['password']) {
                 $this->updateLogin($user['id']); //更新用户登录信息
                 return $user['id']; //登录成功，返回用户ID
@@ -132,7 +132,7 @@ class UcenterUserModel extends Model {
         }
 
         $user = $this->where($map)->field(true)->find();
-        if (is_array($user) && $user['status'] == 1) {
+        if (is_array($user) && $user['status'] > 0) {
             return $user;
         } else {
             return -101; //用户不存在或被禁用

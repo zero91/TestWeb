@@ -27,7 +27,7 @@
   padding: 5px 0;
 }
 
-.user-form-item #register-email, .user-form-item #register-password, .user-form-item #captcha {
+.user-form-item input[type="text"], .user-form-item input[type="password"], .user-form-item #captcha {
   padding: 10px;
   color: #9198A3;
   font-size: 1.2em;
@@ -36,7 +36,7 @@
   border: 1px solid #eee;
 }
 
-.user-form-item #register-email, .user-form-item #register-password {
+.user-form-item #register-email, .user-form-item #login-username, .user-form-item input[type="password"] {
   width: 100%;
 }
 
