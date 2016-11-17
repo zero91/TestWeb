@@ -60,6 +60,44 @@ class UserController extends HomeController {
     }
 
     //
+    // @brief  method  profile  个人基本信息页
+    //
+    public function profile() {
+        $this->assign('title', "个人信息");
+        $uid = g_is_login();
+        if ($uid > 0) {
+            $user = A('User/User', 'Api')->info($uid);
+            $this->assign("user", $user);
+            $this->display();
+        } else {
+            $this->redirect('User/login');
+        }
+    }
+
+    // 更改账户密码
+    public function password() {
+        if (g_is_login()) {
+            $this->display();
+        } else {
+            $this->redirect('User/login');
+        }
+    }
+
+    // 用户上传头像界面
+    public function avatar() {
+        if (g_is_login()) {
+            $this->display();
+        } else {
+            $this->redirect('User/login');
+        }
+    }
+
+    public function editimg($success=false) {
+        $this->assign("success", $success);
+        $this->display();
+    }
+
+    //
     // @brief  method  captcha  返回验证码图片
     //
     public function captcha() {
@@ -239,12 +277,12 @@ class UserController extends HomeController {
 
         //TODO: cookie有效时间的处理
 
-        if (g_is_login() > 0) {
-            $this->ajaxReturn(array('success' => false, 'error' => 102, 'msg' => '你已登录'));
-        }
-
         $uid = A('User/User', 'Api')->login($username, $password, 1);
         if ($uid > 0) {
+            if (g_is_login() > 0) {
+                $this->ajaxReturn(array('success' => false, 'error' => 102, 'msg' => '你已登录'));
+            }
+
             if (D('User')->login($uid)) {
                 $this->ajaxReturn(array("success" => true));
             } else {
@@ -263,7 +301,7 @@ class UserController extends HomeController {
     }
 
     //
-    // @brief  ajax_logout  用户登出
+    // @brief  method  ajaxLogout  用户登出
     //
     // @request  POST
     //

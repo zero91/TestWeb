@@ -1,0 +1,32 @@
+<include file="Common/header" />
+<include file="Material/common" />
+
+<link href="__PUBLIC__/css/material.css?tm={:g_random()}" rel="stylesheet" type="text/css" media="all" />
+
+<div class="container">
+    <div class="material-box">
+        <div class="material-section">
+            <h3 class="material-view-title">学习材料</h3>
+            <table height="100px;" width="100%" border="1px" cellspacing="0" style="text-align:center;margin-top:10px;">
+                <tr style="background-color:#f2f7ff;">
+                    <th width="20%" style="text-align:center;">资料主题</th>
+                    <th width="20%" style="text-align:center;">访问链接</th>
+                    <th width="8%" style="text-align:center;">访问密码</th>
+                    <th width="52%" style="text-align:center;">推荐理由</th>
+                </tr>
+                <foreach name="material_list" item="material">
+                <tr height="89px">
+                    <td>{$material['title']}</td>
+                    <td>
+                        <a target="_blank" href="{$material['url']}">{$material['url']}</a>
+                    </td>
+                    <td><if condition="empty($material['password'])">无<else/>{$material['password']}</if></td>
+                    <td>{$material['reason']}</td>
+                </tr>
+                </foreach>
+            </table>
+        </div>
+    </div>
+</div>
+
+<include file="Common/footer" />

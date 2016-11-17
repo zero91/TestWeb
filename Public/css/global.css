@@ -1,0 +1,23 @@
+html, body {height:100%;}
+#fixed-wrapper {height:100%;}
+body > #fixed-wrapper {
+  position: relative;
+  min-height: 100%;
+  height: auto;
+}
+
+#main-content {padding-bottom: 70px;}
+
+#footer {
+  position: relative;
+  bottom: 0px;
+  height: 60px;
+  width: 100%;
+  margin-top: -62px;
+}
+
+.footer-bottom {
+	background: #131313;
+	padding: 1.5em 0;
+}
+

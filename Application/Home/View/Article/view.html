@@ -1,0 +1,24 @@
+<include file="Common/header" />
+<include file="Index/Common" />
+<link href="__PUBLIC__/css/article.css?tm={:g_random()}" rel="stylesheet" type="text/css" media="all" />
+
+<div class="container">
+    <div class="article-box">
+        <div class="article-section">
+            <h3 class="article-view-title">{$article_title}</h3>
+            <div id="article-content">
+                {$article_content}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/third/ueditor/ueditor.parse.js"></script>
+<script>
+setTimeout(function() { uParse('div', {
+    'highlightJsUrl':'__PUBLIC__/third/ueditor/third-party/SyntaxHighlighter/shCore.js',
+    'highlightCssUrl':'__PUBLIC__/third/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css'})
+}, 300);
+</script>
+
+<include file="Common/footer" />

@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="header-bottom">
+        <div class="list-nav">
+            <ul>                                                                 
+                <li><a href="{:U('Material/index')}">全部资料</a></li>|
+                <li><a href="{:U('Material/add')}">添加资料</a></li>
+            </ul>
+        </div>
+        <!-- script for menu -->
+            <script>
+            $( "span.menu" ).click(function() {
+              $( ".list-nav" ).slideToggle( "slow", function() {
+                // Animation complete.
+              });
+            });
+        </script>
+        <!-- script for menu -->
+
+        <div class="clearfix"></div>
+    </div>
+</div>

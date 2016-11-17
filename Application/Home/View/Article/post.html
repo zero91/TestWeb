@@ -1,0 +1,56 @@
+<include file="Common/header" />
+<link href="__PUBLIC__/css/article.css?tm={:g_random()}" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="__PUBLIC__/third/ueditor/ueditor.config.js?tm={:g_random()}"></script> 
+<script type="text/javascript" src="__PUBLIC__/third/ueditor/ueditor.all.js?tm={:g_random()}"></script> 
+
+<div class="container">
+    <div class="article-box">
+        <div class="article-section">
+            <h3 class="article-box-head">发表文章</h3>
+            <div class="edit-article">
+                <div class="edit-article-item">
+                    <input type="text" value="请输入文章标题" id="article-title" />
+                    <p class="tips-ipt" id="article-title-tip">文章标题不能为空!</p>
+                </div>
+
+                <div class="edit-article-item">
+                    <script type="text/plain" id="article-content" name="article-content"></script>
+                    <script type="text/javascript">UE.getEditor('article-content', {autoHeightEnabled: false});</script>
+                    <!-- <script type="text/javascript">UE.getEditor('article-content', UE.utils.extend({toolbars:[[{$Think.config.EDITOR_TOOLBARS}]]}));</script> -->
+                </div>
+
+                <div class="edit-article-item">
+                    <input type="text" value="文章标签，逗号分隔。例如：RNN,机器翻译" id="article-tags" />
+                    <p class="tips-ipt" id="article-tags-tip">账号不能为空!</p>
+                </div>
+
+                <div class="edit-article-item">
+                    <input type="text" value="请输入原文链接，选填" id="article-source" />
+                    <p class="tips-ipt" id="article-source-tip">账号不能为空!</p>
+                </div>
+
+                <div class="edit-article-item">
+                    <input type="text" value="请输入原文作者，选填" id="article-author" />
+                    <p class="tips-ipt" id="article-author-tip">账号不能为空!</p>
+                </div>
+
+                <div class="edit-article-item">
+                    <input type="text" value="请输入验证码" id="captcha" name="captcha"/>
+                    <img src="{:U('User/captcha')}" onclick="updateCaptcha();" id="captcha-image" />
+                    <p class="tips-ipt" id="captcha-tip">验证码不能为空!</p>
+                </div>
+
+                <div class="edit-article-item">
+                    <input name="edit-article-btn" type="submit" id="edit-article-btn" value="提交">
+                    <p class="tips-ipt" id="edit-article-btn-tip">提交失败!</p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/js/common.js?tm={:g_random()}"></script>
+<script src="__PUBLIC__/js/article.js?tm={:g_random()}"></script>
+
+<include file="Common/footer" />

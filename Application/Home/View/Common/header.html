@@ -3,7 +3,9 @@
 <head>
 <title>{$title}</title>
 <link  href="__PUBLIC__/third/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="__PUBLIC__/css/style.css?tm={:g_random()}" rel="stylesheet" type="text/css" media="all" />
+<link href="__PUBLIC__/css/global.css?tm={:g_random()}" rel="stylesheet" type="text/css" media="all" />
+<link href="__PUBLIC__/css/utils.css" rel="stylesheet" type="text/css" media="all" />
 <script src="__PUBLIC__/third/jquery/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,9 +20,15 @@ var gCheckCaptchaAjaxUrl = "{:U('User/ajaxCheckCaptcha')}";
 var gCheckEmailAjaxUrl = "{:U('User/ajaxCheckEmail')}";
 var gRegisterAjaxUrl = "{:U('User/ajaxRegister')}";
 var gLoginAjaxUrl = "{:U('User/ajaxLogin')}";
+var gPostArticleAjaxUrl = "{:U('Article/ajaxPost')}";
+var gFetchArticleAjaxUrl = "{:U('Article/ajaxFetch')}";
+var gAddMaterialAjaxUrl = "{:U('Material/ajaxAdd')}";
 </script>
 
 <body>
+<div id="fixed-wrapper">
+<div id="main-content">
+
 <!-- header-section-starts -->
 <div class="header">
     <div class="container">
@@ -29,47 +37,41 @@ var gLoginAjaxUrl = "{:U('User/ajaxLogin')}";
         </div>
         <div class="pages">
             <ul>
-                <li><a class="active" href="index.html">Articles</a></li>
-                <li><a href="3dprinting.html">3D Printers</a></li>
-                <li><a href="404.html">Tutorials</a></li>
+                <if condition="'__ACTION__' eq U('Index/index', '', '')">
+                    <li><a class="active" href="{:U('Index/index')}">文章列表</a></li>
+                <else/>
+                    <li><a href="{:U('Index/index')}">文章列表</a></li>
+                </if>
+
+                <if condition="'__ACTION__' eq U('Material/index', '', '')">
+                    <li><a class="active" href="{:U('Material/index')}">学习资料</a></li>
+                <else/>
+                    <li><a href="{:U('Material/index')}">学习资料</a></li>
+                </if>
+
+                <if condition="'__ACTION__' eq U('Article/post', '', '')">
+                    <li><a class="active" href="{:U('Article/post')}">投稿</a></li>
+                <else/>
+                    <li><a href="{:U('Article/post')}">投稿</a></li>
+                </if>
             </ul>
         </div>
         <div class="navigation">
             <ul>
-                <li><a href="about.html">关于我们</a></li>
-                <li><a class="active" href="{:U('User/login')}">登录</a></li>
-                <li><a class="active" href="{:U('User/register')}">注册</a></li>
+                <if condition="g_is_login()">
+                    <li>
+                        <a href="{:U('User/profile')}" data-toggle="tooltip" class="tip" data-placement="bottom" data-original-title="个人主页">
+                            <span>{:g_get_nickname()}</span>
+                        </a>
+                    </li>
+                    <!-- <li><a href="{:U('User/logout')}" data-toggle="tooltip" class="tip" data-placement="bottom" data-original-title="退出"><i class="glyphicon glyphicon-off"></i></a></li>-->
+                    <li><img class="img-circle bm_small_avatar" src="{:g_get_user_avatar(g_is_login(), 's')}?{echo random()}" /></li>
+                <else/>
+                    <li><a class="active" href="{:U('User/login')}">登录</a></li>
+                    <li><a class="active" href="{:U('User/register')}">注册</a></li>
+                </if>
             </ul>
         </div>
-        <div class="clearfix"></div>
-    </div>
-</div>
-<div class="container">
-    <div class="header-bottom">
-        <div class="type">
-            <h5>Article Types</h5>
-        </div>
-        <span class="menu"></span>
-        <div class="list-nav">
-            <ul>                                                                 
-                <li><a href="3dprinting.html">3D Printing</a></li>|
-                <li><a href="materials.html">Materials</a></li>|
-                <li><a href="printing.html">Printing</a></li>|
-                <li><a href="filestoprint.html">Files to Print</a></li>|
-                <li><a href="404.html">Videos</a></li>|
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </div>
-        <!-- script for menu -->
-            <script>
-            $( "span.menu" ).click(function() {
-              $( ".list-nav" ).slideToggle( "slow", function() {
-                // Animation complete.
-              });
-            });
-        </script>
-        <!-- script for menu -->
-
         <div class="clearfix"></div>
     </div>
 </div>

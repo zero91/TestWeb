@@ -3,30 +3,30 @@ $(document).on('focusin', '.user-form-item input', function () {
 }); 
 
 $(document).on("focus", "input[type='text']", function() {
-    var $val = $(this).val();
-    if ($val == this.defaultValue) {
+    var val = $(this).val();
+    if (val == this.defaultValue) {
         $(this).val("");
     }
 }); 
 
 $(document).on("blur", "input[type='text']", function() {
-    var $val = $(this).val();
-    if ($val == "") {
+    var val = $(this).val();
+    if (val == "") {
         $(this).val(this.defaultValue);
     }
 });
 
 $(document).on("focus", "input[type='password']", function() {
-    var $val = $(this).data('placeholder');
-    if ($val != '') {
+    var val = $(this).data('placeholder');
+    if (val != '') {
         $(this).attr('placeholder', '');
     }
 });
 
 $(document).on("blur", "input[type='password']", function() {
-    var $val = $(this).data('placeholder');
-    if ($val != "") {
-        $(this).attr('placeholder', $val);
+    var val = $(this).data('placeholder');
+    if (val != "") {
+        $(this).attr('placeholder', val);
     }
 });
 
@@ -36,10 +36,6 @@ $(document).on('blur', '#register-email', function() {
 
 $(document).on('blur', '#register-password', function() {
     blurCheckPassword($(this));
-});
-
-$(document).on('blur', '#captcha', function() {
-    blurCheckCaptcha($(this), true);
 });
 
 $(document).on('click', '#register-btn', function() {
@@ -54,7 +50,7 @@ $(document).on('click', '#login-btn', function() {
 
 checkEmailPassed = false;
 checkPasswordPassed = false;
-checkCaptchaPassed = false;
+checkUsernamePassed = false;
 
 function focusDeleteTip(obj) {
     var focus_id = obj.attr('id');
@@ -93,18 +89,19 @@ function blurCheckEmail(obj, async) {
 }
 
 function blurCheckPassword(obj) {
+    var focus_id = obj.attr('id');
     var password = obj.val();
     if (password.length == 0) {
         checkPasswordPassed = false;
-        $('#register-password-tip').show(0).html('密码不能为空！');
+        $('#' + focus_id + '-tip').show(0).html('密码不能为空！');
         return false;
     } else if (password.length < 6) {
         checkPasswordPassed = false;
-        $('#register-password-tip').show(0).html('密码长度不能小于6！');
+        $('#' + focus_id + '-tip').show(0).html('密码长度不能小于6！');
         return false;
     } else if (password.length > 32) {
         checkPasswordPassed = false;
-        $('#register-password-tip').show(0).html('密码长度不能大于32！');
+        $('#' + focus_id + '-tip').show(0).html('密码长度不能大于32！');
         return false;
     } else {
         checkPasswordPassed = true;
@@ -112,34 +109,15 @@ function blurCheckPassword(obj) {
     }
 }
 
-function blurCheckCaptcha(obj, async) {
-    var captcha = obj.val();
-    if (captcha == "请输入验证码") {
-        $('#captcha-tip').show(0).html('验证码不能为空！');
-        checkCaptchaPassed = false;
+function blurCheckUsername(obj) {
+    var email = obj.val();
+    if (email.length == 0 || email == '请输入账号') {
+        $('#login-username-tip').show(0).html('账号不能为空！');
+        checkUsernamePassed = false;
         return false;
-    } else {
-        $.ajax({
-            type: "POST",
-            url: gCheckCaptchaAjaxUrl,
-            async: async,
-            data: {
-                captcha: captcha,
-            },
-            success: function(response) {
-                if (!response.success) {
-                    $('#captcha-tip').show(0).html(response.msg);
-                    checkCaptchaPassed = false;
-                } else {
-                    checkCaptchaPassed = true;
-                }
-                return checkCaptchaPassed;
-            }
-        });
-        if (async == false) {
-            return checkCaptchaPassed;
-        }
     }
+    checkUsernamePassed = true;
+    return checkUsernamePassed;
 }
 
 function register() {
@@ -149,7 +127,7 @@ function register() {
     if (!checkPasswordPassed && !blurCheckPassword($("#register-password"))) {
         return false;
     }
-    if (!checkCaptchaPassed && !blurCheckCaptcha($("#captcha"), false)) {
+    if (!gCheckCaptchaPassed && !blurCheckCaptcha($("#captcha"), false)) {
         return false;
     }
 
@@ -179,9 +157,18 @@ function register() {
 
 function login() {
     if ($("#captcha").length > 0 
-                && !checkCaptchaPassed && !blurCheckCaptcha($("#captcha"), false)) {
+                && !gCheckCaptchaPassed && !blurCheckCaptcha($("#captcha"), false)) {
         return false;
     }
+
+    if (!checkUsernamePassed && !blurCheckUsername($("#login-username"))) {
+        return false;
+    }
+
+    if (!checkPasswordPassed && !blurCheckPassword($("#login-password"))) {
+        return false;
+    }
+
     var username = $("#login-username").val();
     var password = $("#login-password").val();
     var captcha = $("#captcha").val();

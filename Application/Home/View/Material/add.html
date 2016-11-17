@@ -1,0 +1,41 @@
+<include file="Common/header" />
+<include file="Material/common" />
+<link href="__PUBLIC__/css/material.css?tm={:g_random()}" rel="stylesheet" type="text/css" media="all" />
+
+<div class="container">
+    <div class="material-box">
+        <div class="material-info-section">
+            <h3 class="material-box-head">添加资料</h3>
+            <div class="add-material-form">
+                <div class="add-material-item">
+                    <input type="text" value="资料主题" id="material-title" name="material-title">
+                    <p class="tips-ipt" id="material-title-tip">资料主题不能为空!</p>
+                </div>
+                <div class="add-material-item">
+                    <input type="text" value="访问链接" id="material-url" name="material-url">
+                    <p class="tips-ipt" id="material-url-tip">访问链接不能为空!</p>
+                </div>
+                <div class="add-material-item">
+                    <input type="text" value="访问密码" id="material-password" name="material-password">
+                    <p class="tips-ipt" id="material-password-tip">访问密码不能为空!</p>
+                </div>
+                <div class="add-material-item">
+                    <textarea rows="6" cols="20" name="material-reason" id="material-reason">推荐理由</textarea>
+                    <p class="tips-ipt" id="material-reason-tip">推荐理由不能为空!</p>
+                </div>
+                <div class="add-material-item">
+                    <input type="text" value="资料标签，逗号分隔。例如：RNN,机器翻译" id="material-tags" />
+                    <p class="tips-ipt" id="material-tags-tip">标签不能为空!</p>
+                </div>
+                <div class="add-material-item">
+                    <input name="material-add-btn" type="submit" id="material-add-btn" value="提交">
+                    <p class="tips-ipt" id="material-add-btn-tip">提交失败!</p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/js/common.js?tm={:g_random()}"></script>
+<script src="__PUBLIC__/js/material.js?tm={:g_random()}"></script>
+<include file="Common/footer" />
