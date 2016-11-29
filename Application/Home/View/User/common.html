@@ -1,0 +1,20 @@
+<link href="__PUBLIC__/css/user-space.css" rel="stylesheet" type="text/css"/>
+
+<div class="user-common">
+    <div class="container">
+        <ul class="nav nav-pills" role="tablist">
+            <if condition="'__ACTION__' eq U('User/profile', '', '')">
+                <li class="active"><a href="{:U('User/profile')}">基本信息</a></li>
+            <else/>
+                <li><a href="{:U('User/profile')}">个人信息</a></li>
+            </if>
+
+            <if condition="'__ACTION__' eq U('User/password', '', '')">
+                <li class="active"><a href="{:U('User/password')}">修改密码</a></li>
+            <else/>
+                <li><a href="{:U('User/password')}">修改密码</a></li>
+            </if>
+        </ul>
+    </div>
+</div>
+

@@ -74,7 +74,9 @@ class UserController extends HomeController {
         }
     }
 
-    // 更改账户密码
+    //
+    // @brief method  password  更改账户密码
+    //
     public function password() {
         if (g_is_login()) {
             $this->display();
@@ -316,6 +318,65 @@ class UserController extends HomeController {
             $this->ajaxReturn(array("success" => true));
         } else {
             $this->ajaxReturn(array("success" => false, "error" => 101, "msg" => "您尚未登录"));
+        }
+    }
+
+    //
+    // @brief  method  ajaxUpdatePassword  更改密码
+    //
+    // @request  POST
+    //
+    // @param  string  $cur_password  新密码
+    // @param  string  $new_password  老密码
+    // @param  stirng  $captcha       验证码
+    //
+    // @ajaxReturn  正确 => array("success" => true, "forward" => 跳转链接),
+    //              失败 => array("success" => false, "error" => 错误码, "msg" => 错误提示信息)
+    //
+    // @error  101  用户尚未登录
+    // @error  102  新密码长度不合法
+    // @error  103  新密码与旧密码相同
+    // @error  104  旧密码不对
+    // @error  105  新密码不合法
+    // @error  106  更改错误，可能是其它位置的地方发生错误
+    //
+    public function ajaxUpdatePassword($cur_password, $new_password, $captcha='') {
+        $uid = g_is_login();
+        if (!$uid) {
+            $this->ajaxReturn(array("success" => false, "error" => 101, "msg" => "您尚未登录"));
+        }
+
+        if (!g_check_captcha($captcha, $this->verify_id, true)) {
+            $this->ajaxReturn(array("success" => false, "error" => 102, "msg" => "验证码错误"));
+        }
+
+        $ret = A('User/User', 'Api')->updateInfo(
+                                    $uid, $cur_password, array("password" => $new_password), 4);
+        if ($ret['success']) {
+            D('User')->logout();
+            $this->ajaxReturn(array("success" => true, "forward" => U('User/login')));
+
+        } else {
+            $res = array("success" => false);
+            switch ($ret['error']) {
+                case 0:
+                    $res['error'] = 103;
+                    $res['msg'] = '新旧密码不能相同';
+                    break;
+                case -101:
+                    $res['error'] = 104;
+                    $res['msg'] = '旧密码不对';
+                    break;
+                case -4:
+                    $res['error'] = 105;
+                    $res['msg'] = '新密码不合法';
+                    break;
+                default:
+                    $res['error'] = 106;
+                    $res['msg'] = '更改错误';
+                    break;
+            }
+            $this->ajaxReturn($res);
         }
     }
 

@@ -9,4 +9,4 @@ define('UC_API_TYPE', 'Model'); //可选值 Model / Service
 define('UC_AUTH_KEY', 'AIuJ`}+l(Q1bzwGs>a0Fqh.2t&N?Vj~%5UoOfWY6'); //加密KEY
 define('UC_DB_DSN', 'mysql://jiehuozhe:jiehuozhe@127.0.0.1:3306/jiehuozhe'); // 数据库连接，使用Model方式调用API必须配置此项
 define('UC_TABLE_PREFIX', 'jhz_'); // 数据表前缀，使用Model方式调用API必须配置此项
-define('UC_UPDATE_NEED_PASSWORD', false); // 用户更新个人信息时，是否需要使用密码
+define('UC_UPDATE_NEED_PASSWORD', true); // 用户更新个人信息时，是否需要使用密码

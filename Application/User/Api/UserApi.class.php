@@ -105,7 +105,7 @@ class UserApi extends Api {
     //
     public function updateInfo($username, $password, $data, $type=1) {
         $res = $this->model->updateUserFields($username, $password, $data, $type);
-        if ($res === true) {
+        if ($res === true || $res > 0) {
             return array("success" => true);
         } else {
             return array('success' => false, 'error' => $res);

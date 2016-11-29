@@ -182,7 +182,6 @@ function login() {
             captcha: captcha,
         },
         success: function(response) {
-            console.log(response);
             if (!response.success) {
                 $('#login-btn-tip').show(0).html(response.msg);
                 updateCaptcha();

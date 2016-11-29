@@ -20,6 +20,7 @@ class MaterialController extends HomeController {
     }
 
     public function add() {
+        //TODO 判断用户是否登录，若未登录，跳转到登录界面
         $this->display();
     }
 
