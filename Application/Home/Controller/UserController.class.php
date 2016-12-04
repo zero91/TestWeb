@@ -85,8 +85,10 @@ class UserController extends HomeController {
         }
     }
 
-    // 用户上传头像界面
-    public function avatar() {
+    //
+    // @brief  method  uploadAvatar  用户上传头像，并进行裁剪
+    //
+    public function uploadAvatar() {
         if (g_is_login()) {
             $this->display();
         } else {
@@ -94,7 +96,10 @@ class UserController extends HomeController {
         }
     }
 
-    public function editimg($success=false) {
+    //
+    // @brief  method  avatarInfo  用户头像信息，包含有大、中、小头像
+    //
+    public function avatarInfo($success=false) {
         $this->assign("success", $success);
         $this->display();
     }
@@ -378,6 +383,53 @@ class UserController extends HomeController {
             }
             $this->ajaxReturn($res);
         }
+    }
+
+    //
+    // @brief  method  ajaxCropAvatar  截取用户头像
+    // @request  POST
+    //
+    // @param  string  $orig_pic  原始图片地址
+    // @param  string  $x         截图图片x轴坐标
+    // @param  string  $y         截图图片y轴坐标
+    // @param  string  $w         截图图片宽度
+    // @param  string  $h         截图图片高度
+    //
+    // @ajaxReturn  成功 - array("success" => true)
+    //              失败 - array("success" => false, "error" => 错误码, "msg" => 错误码提示信息)
+    //
+    // @error  101  用户尚未登录
+    //
+    public function ajaxCropAvatar($orig_pic, $x, $y, $w, $h) {
+        $uid = g_is_login();
+        if (!$uid) {
+            $this->ajaxReturn(array("success" => false, "error" => 101, "msg" => "您尚未登录"));
+        }
+
+        $avatar_dir = g_get_avatar_dir($uid);
+        g_force_mkdir($avatar_dir);
+
+        $extname = g_extname($orig_pic);
+        $crop_img = sprintf("%s/c_%s.%s", $avatar_dir, $uid, $extname);
+        $sm_img = sprintf("%s/s_%s.%s", $avatar_dir, $uid, $extname);
+        $md_img = sprintf("%s/m_%s.%s", $avatar_dir, $uid, $extname);
+        $lg_img = sprintf("%s/l_%s.%s", $avatar_dir, $uid, $extname);
+
+        $remove_file = glob($avatar_dir . "/c_{$uid}.*");
+        $remove_file = array_merge($remove_file, glob($avatar_dir . "/s_{$uid}.*"));
+        $remove_file = array_merge($remove_file, glob($avatar_dir . "/m_{$uid}.*"));
+        $remove_file = array_merge($remove_file, glob($avatar_dir . "/l_{$uid}.*"));
+        foreach ($remove_file as $imgfile) {
+            if (strtolower($extname) != g_extname($imgfile)) {
+                unlink($imgfile);
+            }
+        }
+        g_crop_image(WEB_ROOT . $orig_pic, $crop_img, $x, $y, $w, $h, false);
+        $success = true;
+        $success = $success && g_resize_image($crop_img, $lg_img, 384, 384);
+        $success = $success && g_resize_image($crop_img, $md_img, 244, 244);
+        $success = $success && g_resize_image($crop_img, $sm_img, 100, 100);
+        $this->ajaxReturn(array("success" => $success));
     }
 
     private $verify_id = 1;

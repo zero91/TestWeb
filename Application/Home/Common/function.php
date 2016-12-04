@@ -93,3 +93,27 @@ function g_get_avatar_dir($uid) {
     return $avatar_dir;
 }
 
+//
+// @brief  function  g_force_mkdir  创建新目录
+//
+// @param  string  $path  待创建的新目录
+//
+function g_force_mkdir($path) {
+    if (!file_exists($path)) {
+        g_force_mkdir(dirname($path));
+        mkdir($path, 0777);
+    }
+}
+
+//
+// @brief  function  g_extname  获取文件扩展名
+//
+// @param  string  $filename  文件名
+//
+// @return  string  扩展名称
+//
+function g_extname($filename) {
+    $pathinfo = pathinfo($filename);
+    return strtolower($pathinfo['extension']);
+}
+
