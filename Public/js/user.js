@@ -47,6 +47,10 @@ $(document).on('click', '#update-password-btn', function() {
     updatePassword();
 });
 
+$(document).on('click', '#update-profile-btn', function() {
+    updateProfile();
+});
+
 function focusDeleteTip(obj) {
     var focus_id = obj.attr('id');
     $('#' + focus_id + '-tip').hide(0).html('');
@@ -119,3 +123,37 @@ function updatePassword() {
     });
 }
 
+function updateProfile() {
+    var email = $("#email").val();
+    var nickname = $("#nickname").val();
+    var gender = $("#gender").val();
+    var qq = $("#qq").val();
+    var wechat = $("#wechat").val();
+
+    var orginal_tags = $("#interest-tags").val();
+    var tags = toSBC(orginal_tags).replace('，', ',').split(',');
+
+    var req_dict = {
+        'email' : email,
+        'nickname' : nickname,
+        'gender' : gender,
+        'qq' : qq,
+        'wechat' : wechat,
+        'tags' : tags
+    };
+
+    $.ajax({
+        type: "POST",
+        url: gUpdateProfileAjaxUrl,
+        data: req_dict,
+        success: function(response) {
+            if (response.success) {
+                $("#update-profile-btn-tips").css('color', '#2ECC71').html('信息已经成功修改');
+                $("#update-profile-btn-tips").fadeIn(800);
+                $("#update-profile-btn-tips").fadeOut(2500);
+            } else {
+                $("#update-profile-btn-tips").css('color', '#f44336').show(0).html(response.msg);
+            }
+        }
+    });
+}

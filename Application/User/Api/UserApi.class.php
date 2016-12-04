@@ -103,8 +103,8 @@ class UserApi extends Api {
     // @return array    (1) success=true - 修改成功
     //                  (2) success=false - 修改失败, error - 错误编码
     //
-    public function updateInfo($username, $password, $data, $type=1) {
-        $res = $this->model->updateUserFields($username, $password, $data, $type);
+    public function updateInfo($username, $password, $data, $type=1, $authorize=true) {
+        $res = $this->model->updateUserFields($username, $password, $data, $type, $authorize);
         if ($res === true || $res > 0) {
             return array("success" => true);
         } else {

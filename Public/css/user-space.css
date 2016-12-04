@@ -107,4 +107,9 @@
   background:#000;
 }
 
+.update-profile-tips {
+  color: #2ECC71;
+  margin-left: 14px;
+  display: none;
+}
 

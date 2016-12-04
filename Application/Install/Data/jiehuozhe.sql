@@ -50,6 +50,17 @@ CREATE TABLE jhz_user (
 ) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COMMENT='用户应用信息表';
 
 
+/* DROP TABLE IF EXISTS jhz_user_tag; */
+CREATE TABLE jhz_user_tag (
+  `uid` INT(10) UNSIGNED NOT NULL COMMENT '用户ID',
+  `tag` VARCHAR(64) NOT NULL COMMENT '标签',
+
+  UNIQUE KEY `uid_tag` (`uid`, `tag`),
+  KEY `uid` (`uid`),
+  KEY `tag` (`tag`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '用户兴趣标签';
+
+
 /* DROP TABLE IF EXISTS jhz_article; */
 CREATE TABLE jhz_article (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -131,7 +142,7 @@ CREATE TABLE jhz_article_comment (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT="服务评论表";
 
 
-DROP TABLE IF EXISTS jhz_material;
+/* DROP TABLE IF EXISTS jhz_material; */
 CREATE TABLE jhz_material (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '资料ID号',
   `uid` INT(10) UNSIGNED NOT NULL COMMENT '用户ID号',
@@ -153,7 +164,7 @@ CREATE TABLE jhz_material (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT="学习资料表";
 
 
-DROP TABLE IF EXISTS jhz_material_tag;
+/* DROP TABLE IF EXISTS jhz_material_tag; */
 CREATE TABLE jhz_material_tag (
   `mid` INT(10) UNSIGNED NOT NULL COMMENT '资料ID号',
   `tag` VARCHAR(64) NOT NULL COMMENT '标签',

@@ -66,9 +66,27 @@ class UserController extends HomeController {
         $this->assign('title', "个人信息");
         $uid = g_is_login();
         if ($uid > 0) {
-            $user = A('User/User', 'Api')->info($uid);
+            $ucenter_info = A('User/User', 'Api')->info($uid, 4);
+
+            $user = array();
+            $user['email'] = $ucenter_info['email'];
+            $user['qq'] = $ucenter_info['qq'];
+            $user['wechat'] = $ucenter_info['wechat'];
+            $user['gender'] = $ucenter_info['gender'];
+
+            $user_info = D('User')->field(true)->find($uid);
+            $user['nickname'] = $user_info['nickname'];
+
+            $user_tags = D('UserTag')->field('tag')->where(array('uid' => $uid))->select();
+            $user['tags'] = array();
+            foreach ($user_tags as $ut) {
+                $tags[] = $ut['tag'];
+            }
+            $user['tags'] = $tags;
+
             $this->assign("user", $user);
             $this->display();
+
         } else {
             $this->redirect('User/login');
         }
@@ -430,6 +448,78 @@ class UserController extends HomeController {
         $success = $success && g_resize_image($crop_img, $md_img, 244, 244);
         $success = $success && g_resize_image($crop_img, $sm_img, 100, 100);
         $this->ajaxReturn(array("success" => $success));
+    }
+
+    //
+    // @brief  method  ajaxUpdateProfile  更新用户基本信息
+    //
+    // @request  POST
+    //
+    // @param  string  $email     用户邮箱
+    // @param  string  $nickname  用户昵称
+    // @param  string  $gender    用户验证码
+    // @param  string  $qq        qq
+    // @param  string  $wechat    微信
+    // @param  array   $tags      用户兴趣标签列表
+    //
+    // @ajaxReturn  正确 => array("success" => true)
+    //              失败 => array("success" => false, "error" => 错误码, "msg" => 错误提示信息)
+    //
+    // @error  101  用户尚未登录
+    // @error  102  邮箱格式不正确
+    // @error  103  邮箱长度不合法
+    // @error  104  该邮箱已被禁止注册
+    // @error  105  邮箱被占用
+    // @error  106  发生未知错误
+    //
+    public function ajaxUpdateProfile($email, $nickname, $gender, $qq, $wechat, $tags) {
+        $uid = g_is_login();
+        if (!$uid) {
+            $this->ajaxReturn(array("success" => false, "error" => 101, "msg" => "您尚未登录"));
+        }
+
+        if (strlen($qq) == 0) $qq = null;
+        if (strlen($wechat) == 0) $wechat = null;
+
+        $ucenter_data = array(
+            "email" => $email,
+            "gender" => $gender,
+            "qq" => $qq,
+            "wechat" => $wechat,
+        );
+        $ret = A('User/User', 'Api')->updateInfo($uid, null, $ucenter_data, 4, false);
+
+        if ($ret['success'] || $ret['error'] == 0) {
+            D('UserTag')->addTags($uid, $tags, true);
+            D('User')->where(array('uid' => $uid))->save(array("nickname" => $nickname));
+            $this->ajaxReturn(array("success" => true));
+
+        } else {
+            $res = array("success" => false);
+            switch ($ret['error']) {
+                case -5:
+                    $res['error'] = 102;
+                    $res['msg'] = '邮箱格式不正确';
+                    break;
+                case -6:
+                    $res['error'] = 103;
+                    $res['msg'] = '邮箱长度不合法';
+                    break;
+                case -7:
+                    $res['error'] = 104;
+                    $res['msg'] = '该邮箱已禁止注册';
+                    break;
+                case -8:
+                    $res['error'] = 105;
+                    $res['msg'] = '邮箱被占用';
+                    break;
+                default:
+                    $res['error'] = 106;
+                    $res['msg'] = '发生未知错误';
+                    break;
+            }
+            $this->ajaxReturn($res);
+        }
     }
 
     private $verify_id = 1;

@@ -4,9 +4,9 @@
     <div class="container">
         <ul class="nav nav-pills" role="tablist">
             <if condition="'__ACTION__' eq U('User/profile', '', '')">
-                <li class="active"><a href="{:U('User/profile')}">基本信息</a></li>
+                <li class="active"><a href="{:U('User/profile')}">个人设置</a></li>
             <else/>
-                <li><a href="{:U('User/profile')}">个人信息</a></li>
+                <li><a href="{:U('User/profile')}">个人设置</a></li>
             </if>
 
             <if condition="'__ACTION__' eq U('User/password', '', '')">

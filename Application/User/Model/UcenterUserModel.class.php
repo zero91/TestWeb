@@ -174,7 +174,7 @@ class UcenterUserModel extends Model {
     // @error  -101  身份未验证通过，密码不正确
     // @error  其他错误编号见自动验证注释
     //
-    public function updateUserFields($username, $password, $data, $type=1) {
+    public function updateUserFields($username, $password, $data, $type=1, $authorize=true) {
         $map = array();
         switch ($type) {
             case 1: $map['username'] = $username; break;
@@ -185,7 +185,7 @@ class UcenterUserModel extends Model {
         }
 
         // 更新前检查用户密码
-        if (!$this->verifyUser($username, $password, $type)) {
+        if ($authorize && !$this->verifyUser($username, $password, $type)) {
             return -101; // 密码不正确
         }
 
